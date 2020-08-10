@@ -10,14 +10,10 @@ edge_transport_nodes2:
     - device_name: "fp-eth0"
       uplink_name: "uplink-1"
     - device_name: "fp-eth1"
-      uplink_name: "uplink-2"      
+      uplink_name: "uplink-2"
     ip_assignment_spec:
-      resource_type: StaticIpListSpec
-      ip_list:
-      - "{{ pod_network }}.{{ pod + transport }}.61"
-      - "{{ pod_network }}.{{ pod + transport }}.62"
-      subnet_mask: "{{ transport_network_mask }}"
-      default_gateway: "{{ transport_gw }}"
+      resource_type: StaticIpPoolSpec
+      ip_pool_name: "{{ ip_pool_name }}"
   node_deployment_info:
     resource_type: "EdgeNode"
     display_name: "{{ edge_node1 }}"
@@ -31,7 +27,7 @@ edge_transport_nodes2:
         placement_type: VsphereDeploymentConfig
         vc_name: "{{ vcenter.fqdn }}"
         vc_username: "{{ vcenter.user }}"
-        vc_password: "{{ vcenter.password }}"        
+        vc_password: "{{ vcenter.password }}"
         data_networks:
         - "{{ vds.uplink1_pg }}"
         - "{{ vds.uplink2_pg }}"
@@ -40,7 +36,7 @@ edge_transport_nodes2:
         - ip_addresses:
           - "{{ pod_network }}.{{ pod + management }}.61"
           prefix_length: 24
-        default_gateway_addresses: 
+        default_gateway_addresses:
         - "{{ pod_network }}.{{ pod + management }}.1"
         hostname: "{{ edge_node1 }}.{{ domain }}"
         compute: "{{ edge_node_vsphere_cluster }}"
@@ -56,7 +52,7 @@ edge_transport_nodes2:
     - device_name: "fp-eth0"
       uplink_name: "uplink-1"
     - device_name: "fp-eth1"
-      uplink_name: "uplink-2"      
+      uplink_name: "uplink-2"
     ip_assignment_spec:
       resource_type: StaticIpListSpec
       ip_list:
@@ -82,11 +78,11 @@ edge_transport_nodes2:
         - "{{ vds.uplink1_pg }}"
         - "{{ vds.uplink2_pg }}"
         management_network: "{{ vds.management_pg }}"
-        management_port_subnets: 
+        management_port_subnets:
         - ip_addresses:
           - "{{ pod_network }}.{{ pod + management }}.62"
           prefix_length: 24
-        default_gateway_addresses: 
+        default_gateway_addresses:
         - "{{ pod_network }}.{{ pod + management }}.1"
         hostname: "{{ edge_node2 }}.{{ domain }}"
         compute: "{{ edge_node_vsphere_cluster }}"
@@ -106,14 +102,10 @@ edge_transport_nodes3:
     - device_name: "fp-eth0"
       uplink_name: "uplink-1"
     - device_name: "fp-eth1"
-      uplink_name: "uplink-2"      
+      uplink_name: "uplink-2"
     ip_assignment_spec:
-      resource_type: StaticIpListSpec
-      ip_list:
-      - "{{ pod_network }}.{{ pod + transport }}.61"
-      - "{{ pod_network }}.{{ pod + transport }}.62"
-      subnet_mask: "{{ transport_network_mask }}"
-      default_gateway: "{{ transport_gw }}"
+      resource_type: StaticIpPoolSpec
+      ip_pool_name: "{{ ip_pool_name }}"
     transport_zone_endpoints:
     - transport_zone_name: "{{ tz_overlay_name }}"
     - transport_zone_name: "{{ tz_edge_name }}"
@@ -130,21 +122,20 @@ edge_transport_nodes3:
         placement_type: VsphereDeploymentConfig
         vc_name: "{{ vcenter.fqdn }}"
         vc_username: "{{ vcenter.user }}"
-        vc_password: "{{ vcenter.password }}"        
+        vc_password: "{{ vcenter.password }}"
         data_networks:
         - "{{ vds.uplink1_pg }}"
         - "{{ vds.uplink2_pg }}"
         management_network: "{{ vds.management_pg }}"
         management_port_subnets:
         - ip_addresses:
-          - "{{ pod_network }}.{{ pod + management }}.61"
+          - "192.168.110.41"
           prefix_length: 24
-        default_gateway_addresses: 
-        - "{{ pod_network }}.{{ pod + management }}.1"
+        default_gateway_addresses:
+        - "192.168.110.1"
         hostname: "{{ edge_node1 }}.{{ domain }}"
         compute: "{{ edge_node_vsphere_cluster }}"
-        storage: "vsanDatastore{{ edge_node_vsphere_cluster }}"
-        host: "{{ edge_node1_vesxi }}"
+        storage: "DS-A"
 - display_name: "{{ edge_node2 }}"
   host_switches:
   - host_switch_profiles:
@@ -156,14 +147,10 @@ edge_transport_nodes3:
     - device_name: "fp-eth0"
       uplink_name: "uplink-1"
     - device_name: "fp-eth1"
-      uplink_name: "uplink-2"      
+      uplink_name: "uplink-2"
     ip_assignment_spec:
-      resource_type: StaticIpListSpec
-      ip_list:
-      - "{{ pod_network }}.{{ pod + transport }}.63"
-      - "{{ pod_network }}.{{ pod + transport }}.64"
-      subnet_mask: "{{ transport_network_mask }}"
-      default_gateway: "{{ transport_gw }}"
+      resource_type: StaticIpPoolSpec
+      ip_pool_name: "{{ ip_pool_name }}"
     transport_zone_endpoints:
     - transport_zone_name: "{{ tz_overlay_name }}"
     - transport_zone_name: "{{ tz_edge_name }}"
@@ -185,16 +172,15 @@ edge_transport_nodes3:
         - "{{ vds.uplink1_pg }}"
         - "{{ vds.uplink2_pg }}"
         management_network: "{{ vds.management_pg }}"
-        management_port_subnets: 
+        management_port_subnets:
         - ip_addresses:
-          - "{{ pod_network }}.{{ pod + management }}.62"
+          - "192.168.110.42"
           prefix_length: 24
-        default_gateway_addresses: 
-        - "{{ pod_network }}.{{ pod + management }}.1"
-        hostname: "{{ edge_node2 }}.{{ domain }}"
+        default_gateway_addresses:
+        - "192.168.110.1"
+        hostname: "{{ edge_node1 }}.{{ domain }}"
         compute: "{{ edge_node_vsphere_cluster }}"
         storage: "vsanDatastore{{ edge_node_vsphere_cluster }}"
-        host: "{{ edge_node2_vesxi }}"
 
 # NSX-T Transport Node Profile NSX-T 2.5
 transport_node_profiles2:
@@ -212,7 +198,7 @@ transport_node_profiles2:
     - device_name: vmnic3
       uplink_name: "uplink-1"
     - device_name: vmnic4
-      uplink_name: "uplink-2"      
+      uplink_name: "uplink-2"
     ip_assignment_spec:
       resource_type: StaticIpPoolSpec
       ip_pool_name: "{{ ip_pool_name }}"
@@ -231,7 +217,7 @@ transport_node_profiles3:
     - uplink_name: "uplink-1"
       vds_uplink_name: "Uplink 1"
     - uplink_name: "uplink-2"
-      vds_uplink_name: "Uplink 2"  
+      vds_uplink_name: "Uplink 2"
     ip_assignment_spec:
       resource_type: StaticIpPoolSpec
       ip_pool_name: "{{ ip_pool_name }}"
@@ -355,7 +341,7 @@ tier0_gateways:
             remote_as_num: "{{ router_as }}"
             bfd:
               enabled: false
-            state: present          
+            state: present
       interfaces:
         - id: "en01-uplink1"
           state: "present"
